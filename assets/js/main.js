@@ -62,7 +62,7 @@ const drawChart = async (currency) => {
         const chartDOM = document.getElementById('chart');
         new Chart(chartDOM, config); 
     } catch (error) {
-        alert(error.message)
+        alert("Error al cargar la API.")
     }
     
 }
