@@ -29,32 +29,42 @@ const calcResult = (amount, currency) => {
 };
 
 const drawChart = async (currency) => {
-    const reqChart = await fetch(`${urlApi}/${currency}`);
-    const dataChart = await reqChart.json();
-
-    const serieToChart = dataChart.serie.slice(0, 10);
-    console.log(serieToChart);
-
-    // const labels = Utils.months({ count: 7 });
-    const data = {
-        labels: serieToChart.map((item) => item.fecha),
-        datasets: [{
-            label: currency,
-            data: serieToChart.map((item) => item.valor),
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
+    try {
+        const reqChart = await fetch(`${urlApi}/${currency}`);
+        const dataChart = await reqChart.json();
+    
+        const serieToChart = dataChart.serie.slice(0, 10);
+        console.log(serieToChart);
+    
+        // const labels = Utils.months({ count: 7 });
+        const data = {
+            labels: serieToChart.map((item) => item.fecha),
+            datasets: [{
+                label: currency,
+                data: serieToChart.map((item) => item.valor),
+                fill: false,
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1
+            }
+            ]
+        };
+    
+        const config = {
+            type: 'line',
+            data: data,
+        };
+    
+        let chartStatus = Chart.getChart("chart");
+        if (chartStatus != undefined) {
+            chartStatus.destroy();
         }
-        ]
-    };
-
-    const config = {
-        type: 'line',
-        data: data,
-    };
-
-    const chartDOM = document.getElementById('MyChart');
-    new Chart(chartDOM, config);
+    
+        const chartDOM = document.getElementById('chart');
+        new Chart(chartDOM, config); 
+    } catch (error) {
+        alert(error.message)
+    }
+    
 }
 
 document.querySelector('#btnConvert').addEventListener('click', () => {
